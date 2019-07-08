@@ -15,10 +15,10 @@
 		<div id="root">
 
 			<h1>Frequency Slider</h1>
-			<input type="range" min="200" max="600" step="1" v-model="data.amp"></input>
-			<h2>The frequency is {{ data.freq }}</h2>
+			<input type="range" min="200" max="600" step="1" v-model="sound.freq"></input>
+			<h2>The frequency is {{ sound.freq }}</h2>
 
-			<p5 src="sketch.js" :data="data"></p5>
+ 			<p5 src="sketch.js" :data="sound"></p5>
 
 		</div>
 

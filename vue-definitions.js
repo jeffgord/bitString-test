@@ -40,7 +40,9 @@ var bitString = new Vue({
   el: '#root',
 
   data: {
-    freq: 432
+    sound: {
+      freq: 220
+    }
   }
 
 })
