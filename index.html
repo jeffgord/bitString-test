@@ -1,0 +1,30 @@
+<!DOCTYPE>
+
+<html>
+
+
+	<head>
+		<script src="https://unpkg.com/vue"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/p5.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.8.0/addons/p5.sound.js"></script>
+	</head>
+
+
+	<body>
+
+		<div id="root">
+
+			<h1>Frequency Slider</h1>
+			<input type="range" min="200" max="600" step="1" v-model="data.amp"></input>
+			<h2>The frequency is {{ data.freq }}</h2>
+
+			<p5 src="sketch.js" :data="data"></p5>
+
+		</div>
+
+		<script src="vue-definitions.js"></script>
+
+	</body>
+
+
+</html>
