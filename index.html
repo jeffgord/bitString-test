@@ -16,7 +16,10 @@
 
 			<h1>Frequency Slider</h1>
 			<input type="range" min="200" max="600" step="1" v-model="sound.freq"></input>
-			<h2>The frequency is {{ sound.freq }}</h2>
+			<br>
+			Set Frequency: <input v-model="sound.freq"></input>
+			<h2>The frequency is {{ sound.freq }}.</h2>
+			<h3>Press "m" to toggle sound on and off.</h3>
 
  			<p5 src="sketch.js" :data="sound"></p5>
 
