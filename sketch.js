@@ -20,7 +20,7 @@ function sketch(parent) {
       canvas = p.createCanvas(400, 400);
       canvas.parent(parent.$el);
 
-      currentFreq = parent.data.freq;
+      currentFreq = parseFloat(parent.data.fundamental);
       prevFreq = currentFreq;
 
       // create osc
@@ -51,7 +51,7 @@ function sketch(parent) {
       p.background(p.map(currentFreq, 200, 600, 0, 255));
 
       // set frequency to user input
-      currentFreq = parseFloat(parent.data.freq);
+      currentFreq = parseFloat(parent.data);
       osc.freq(currentFreq);
     };
   };

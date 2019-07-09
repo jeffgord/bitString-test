@@ -1,3 +1,4 @@
+// p5-vue component, credit: Aatish Bhatia
 Vue.component('p5', {
 
   template: '<div></div>',
@@ -37,13 +38,32 @@ Vue.component('p5', {
 
 // Sets up the main Vue instance
 var bitString = new Vue({
-  el: '#root',
+  
+  el: '#pitch',
 
   data: {
+
     sound: {
-      freq: 220,
-      muted: true
+
+      masterGain: 1,
+
+      fundamental: 432,
+
+      // stores frequency multipliers and amplitude for each harmonic
+      harmData: buildHarmData(16)
     }
   }
-
 })
+
+
+// helper functions
+function buildHarmData(n) {
+  
+  let data = new Array(n);
+
+  for (let i = 0; i < n; i++) {
+    data[i] = { fMult: i + 1, amp: 1 };
+  }
+
+  return data;
+}
