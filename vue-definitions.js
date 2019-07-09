@@ -41,7 +41,8 @@ var bitString = new Vue({
 
   data: {
     sound: {
-      freq: 220
+      freq: 220,
+      muted: true
     }
   }
 
