@@ -1,33 +1,46 @@
-<!DOCTYPE>
+<!DOCTYPE html>
 
 <html>
 
-
 	<head>
+		<!--libraries-->
 		<script src="https://unpkg.com/vue"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.js"></script>
-	</head>
 
+	</head>
 
 	<body>
 
-		<div id="root">
+		<div id="pitch">
 
-			<h1>Frequency Slider</h1>
-			<input type="range" min="200" max="600" step="1" v-model="sound.freq"></input>
+			<!--setting fundamental frequency-->
+			<h1>Fundamental Frequency Slider</h1>
+			<input type="range" min="200" max="600" step="1" v-model="sound.fundamental"></input>
 			<br>
-			Set Frequency: <input v-model="sound.freq"></input>
-			<h2>The frequency is {{ sound.freq }}.</h2>
+			Set Frequency: <input v-model="sound.fundamental"></input>
+			<h2>The fundamental frequency is {{ sound.fundamental }}.</h2>
 			<h3>Press "m" to toggle sound on and off.</h3>
 
- 			<p5 src="sketch.js" :data="sound"></p5>
+
+			<!--sliders for each harmonic-->
+			<ul>
+				<li v-for="harm in sound.harmData">
+					{{ sound.fundamental * harm.fMult }} hz.
+					<input type="range" min="0" max="1" step="0.01" v-model="harm.amp"></input>
+					set multiplier: <input v-model="harm.fMult"></input>
+					and the amplitude is {{ harm.amp }}
+				</li>
+			</ul>
+
+
+			<!--p5 sketch and sound based on pitch data-->
+			<p5 src="sketch.js" :data="sound"></p5>
 
 		</div>
 
-		<script src="vue-definitions.js"></script>
-
 	</body>
 
+	<script src="vue-definitions.js"></script>
 
 </html>
