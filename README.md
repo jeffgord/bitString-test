@@ -1,1 +1,3 @@
-# bitString-test-7-8
+# bitString-test
+
+A working repository for bitString
