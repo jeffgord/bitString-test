@@ -1,4 +1,5 @@
 // p5-vue component, credit: Aatish Bhatia
+
 Vue.component('p5', {
 
   template: '<div></div>',
@@ -55,7 +56,7 @@ var bitString = new Vue({
   }
 })
 
-
+// HOW TO PUT THIS CODE INSIDE harmData ABOVE???
 // helper functions
 function buildHarmData(n) {
   
