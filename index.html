@@ -26,10 +26,10 @@
 			<!--sliders for each harmonic-->
 			<ul>
 				<li v-for="harm in sound.harmData">
-					{{ sound.fundamental * harm.fMult }} hz.
+					{{ (sound.fundamental * harm.fMult).toFixed(2) }} hz.
 					<input type="range" min="0" max="1" step="0.01" v-model="harm.amp"></input>
 					set multiplier: <input v-model="harm.fMult"></input>
-					and the amplitude is {{ harm.amp }}
+					 amplitude: {{ harm.amp }}
 				</li>
 			</ul>
 
