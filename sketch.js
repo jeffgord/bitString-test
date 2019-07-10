@@ -5,10 +5,11 @@ Advisors: Aatish Bhatia and Dan Trueman
 7/9/19
 */
 
+// p5 sketch
 function sketch(parent) {
   return function( p ) {
 
-    let numOscs = parent.data.harmData.length;
+    let numOscs = parent.data.harmData.length; // number of oscs in harmonic spectrum (16)
     let oscArray = []; // array of oscillators starting w/ fundamental
     let ampArray = [numOscs]; // array of amplitudes starting w/ fundamental
     let currentFreq; // fundamental frequency
@@ -17,19 +18,20 @@ function sketch(parent) {
 
     p.setup = function() {
 
+      // canvas
       canvas = p.createCanvas(400, 400);
       canvas.parent(parent.$el);
 
-      // set current fundamental frequency and initialize oscillators
+      // set current fundamental frequency
       currentFreq = parseFloat(parent.data.fundamental);
 
+      // initialize oscs, put in osc array, and populate amp array
       for (let i = 0; i < numOscs; i++) {
-          ampArray[i] = parseFloat(parent.data.harmData[i].amp); 
+          ampArray[i] = parseFloat(parent.data.harmData[i].amp);
 
           let osc = new p5.Oscillator();
           osc.setType('sine');
-          let newFreq = currentFreq * parent.data.harmData[i].fMult
-          osc.freq(parseFloat(newFreq));
+          osc.freq(parseFloat(currentFreq * parent.data.harmData[i].fMult));
           osc.amp(ampArray[i]);
           oscArray.push(osc);
         }
@@ -59,15 +61,12 @@ function sketch(parent) {
     p.draw = function() {
 
       // change sound only with new user input
-      newFreq = parseFloat(parent.data.fundamental);
-      //newAmps = parseFloat(parent.data.harmData.amp)
+      let newFreq = parseFloat(parent.data.fundamental); // constantly updating fundamental frequency
 
       // WARNING: INEFFICIENT TO LOOP THROUGH AMPS EVERY TIME THROUGH DRAW
-      //if (!ampArray.match(newAmps)) {
         for (let i = 0; i < numOscs; i++)
           oscArray[i].amp(parseFloat(parent.data.harmData[i].amp));
-      //}
-
+      
       // WARNING: SETTING THE MULTIPLIER USING THE TEXT BOX ONLY WORKS AFTER YOU
       // CHANGE THE FREQUENCY
       if (currentFreq != newFreq) {
@@ -76,7 +75,7 @@ function sketch(parent) {
           oscArray[i].freq(currentFreq*parent.data.harmData[i].fMult);
       }
       
-      // change background color based on freq
+      // change background color of canvas based on freq
       p.background(p.map(currentFreq, 200, 600, 0, 255));
     };
   };
