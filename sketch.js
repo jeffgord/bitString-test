@@ -18,24 +18,37 @@ function sketch(parent) {
 
     p.setup = function() {
 
-      // canvas
-      canvas = p.createCanvas(400, 400);
-      canvas.parent(parent.$el);
+    	// set current fundamental frequency
+     	currentFreq = parseFloat(parent.data.fundamental);
 
-      // set current fundamental frequency
-      currentFreq = parseFloat(parent.data.fundamental);
+     	// canvas
+     	canvas = p.createCanvas(400, 400);
+     	canvas.parent(parent.$el);
+     	p.background(p.map(currentFreq, 200, 600, 0, 255));
 
-      // initialize oscs, put in osc array, and populate amp array
-      for (let i = 0; i < numOscs; i++) {
-          ampArray[i] = parseFloat(parent.data.harmData[i].amp);
+      	// initialize oscs, put in osc array, and populate amp array
+      	for (let i = 0; i < numOscs; i++) {
+        	ampArray[i] = parseFloat(parent.data.harmData[i].amp);
 
-          let osc = new p5.Oscillator();
-          osc.setType('sine');
-          osc.freq(parseFloat(currentFreq * parent.data.harmData[i].fMult));
-          osc.amp(ampArray[i]);
-          oscArray.push(osc);
+        	let osc = new p5.Oscillator();
+        	osc.setType('sine');
+        	osc.freq(parseFloat(currentFreq * parent.data.harmData[i].fMult));
+        	osc.amp(ampArray[i]);
+        	oscArray.push(osc);
         }
     };
+
+    // update the sketch only when data changes
+    p.dataChanged = function(s, oldS) {
+    	currentFreq = parseFloat(s.fundamental);
+
+    	for (let i = 0; i < numOscs; i++) {
+    		oscArray[i].amp(parseFloat(s.harmData[i].amp));
+    		oscArray[i].freq(currentFreq * s.harmData[i].fMult);
+    	}
+
+    	p.background(p.map(currentFreq, 200, 600, 0, 255));
+    }
 
     // mute function
     p.keyPressed = function() {
@@ -47,8 +60,8 @@ function sketch(parent) {
 
         // toggle sound on and off
         if (!mute) {
-          for (let i = 0; i < numOscs; i++)
-            oscArray[i].start();
+        	for (let i = 0; i < numOscs; i++)
+            	oscArray[i].start();
         }
 
         else {
@@ -56,27 +69,6 @@ function sketch(parent) {
             oscArray[i].stop();
         }
       }
-    };
-
-    p.draw = function() {
-
-      // change sound only with new user input
-      let newFreq = parseFloat(parent.data.fundamental); // constantly updating fundamental frequency
-
-      // WARNING: INEFFICIENT TO LOOP THROUGH AMPS EVERY TIME THROUGH DRAW
-        for (let i = 0; i < numOscs; i++)
-          oscArray[i].amp(parseFloat(parent.data.harmData[i].amp));
-      
-      // WARNING: SETTING THE MULTIPLIER USING THE TEXT BOX ONLY WORKS AFTER YOU
-      // CHANGE THE FREQUENCY
-      if (currentFreq != newFreq) {
-        currentFreq = parseFloat(newFreq);
-        for (let i = 0; i < numOscs; i++)
-          oscArray[i].freq(currentFreq*parent.data.harmData[i].fMult);
-      }
-      
-      // change background color of canvas based on freq
-      p.background(p.map(currentFreq, 200, 600, 0, 255));
     };
   };
 }
