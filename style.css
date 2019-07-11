@@ -7,7 +7,8 @@ h1 {
     font-size: 60px;
     text-align: center;
     margin: 0;
-    padding: 10px 0;    
+    padding: 20px 0;    
+    border-bottom-style: groove;
   }
 
 h2 {
@@ -34,10 +35,13 @@ ul {
     list-style: none;
 }
 
-#pitch-title {
+#freqset {
+    padding: 15px;
+}
+/* #pitch-title {
     border-style: solid;
     border-width: thin;
-}
+}  */
 
 #fundamental {
     display: inline-block;
@@ -46,49 +50,104 @@ ul {
 
 #fundamental-wrapper {
     text-align: center;
-    border-style: solid;
-    border-width: thin;
+    /* border-style: solid;
+    border-width: thin; */
 }
 
+/* 
 #mute {
     border-style: solid;
     border-width: thin;
 }
 
-#pitch-sliders {
-    border-style: solid;
-    border-width: thin;
-}
+
+
+*/
 
 #p5 {
-    display: inline-block;
-    padding: 10px 0;
+    padding-top: 75px;
 }
 
 #p5-wrapper {
     text-align: center;
-    border-style: solid;
+    /* border-style: solid;
     border-width: thin;
     border-color: red;
+    */
 }
 
-/* body {
+
+/*
+body {
     width: 50%;
     margin: 0 auto;
     padding: 0 20px 20px 20px;
-  } */
+  } 
+  */
 
 .grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
+    grid-template-rows: 30% 70%;
     grid-gap: 10px;
 }
 
-    .grid-item {
+    .grid-item-fundamental-controls {
         border-radius: 5px;
         padding: 20px;
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        grid-row-end: 2;
     }
 
+    .grid-item-sliders {
+        border-radius: 5px;
+        padding: 20px;
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 2;
+        grid-row-end: 3;
+    }
+
+    .grid-item-p5 {
+        border-radius: 5px;
+        padding: 20px;
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 2;
+        grid-row-end: 3;
+    }
+
+    .slider {
+        -webkit-appearance: none;
+        width: 150px;
+        height: 10px;
+        border-radius: 5px;   
+        background: #d3d3d3;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+      }
+      
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%; 
+        background: rgb(82, 81, 81);
+        cursor: pointer;
+      }
+      
+      .slider::-moz-range-thumb {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: rgb(82, 81, 81);
+        cursor: pointer;
+      }
   /*
 img {
     display: block;
