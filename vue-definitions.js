@@ -1,5 +1,4 @@
 // p5-vue component, credit: Aatish Bhatia
-
 Vue.component('p5', {
 
   template: '<div></div>',
@@ -27,12 +26,29 @@ Vue.component('p5', {
     },
 
     loadSketch: function() {
-      let myp5 = new p5(sketch(this));
+      this.myp5 = new p5(sketch(this));
+    }
+  },
+
+  data: function() {
+    return {
+      myp5: {}
     }
   },
 
   mounted() {
     this.loadScript(this.src, this.loadSketch);
+  },
+
+  watch: {
+    data: {
+      handler: function(val, oldVal) {
+        if(this.myp5.dataChanged) {
+          this.myp5.dataChanged(val, oldVal);
+        }
+      },
+      deep: true
+    }
   }
 
 })
