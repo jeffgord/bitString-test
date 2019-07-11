@@ -1,0 +1,97 @@
+html {
+    font-size: 10px;
+    font-family: 'Lora', serif;
+  }
+
+h1 {
+    font-size: 60px;
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;    
+  }
+
+h2 {
+    font-size: 30px;
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;   
+}
+
+h3{
+    font-size: 15px;
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;  
+}
+p, li {
+    text-align: center;
+    font-size: 16px;   
+    line-height: 2;
+    letter-spacing: 1px;
+  }
+
+ul {
+    list-style: none;
+}
+
+#pitch-title {
+    border-style: solid;
+    border-width: thin;
+}
+
+#fundamental {
+    display: inline-block;
+    padding: 10px 0;
+}
+
+#fundamental-wrapper {
+    text-align: center;
+    border-style: solid;
+    border-width: thin;
+}
+
+#mute {
+    border-style: solid;
+    border-width: thin;
+}
+
+#pitch-sliders {
+    border-style: solid;
+    border-width: thin;
+}
+
+#p5 {
+    display: inline-block;
+    padding: 10px 0;
+}
+
+#p5-wrapper {
+    text-align: center;
+    border-style: solid;
+    border-width: thin;
+    border-color: red;
+}
+
+/* body {
+    width: 50%;
+    margin: 0 auto;
+    padding: 0 20px 20px 20px;
+  } */
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+    .grid-item {
+        border-radius: 5px;
+        padding: 20px;
+    }
+
+  /*
+img {
+    display: block;
+    margin: 0 auto;
+    padding: 5px;
+  } */
