@@ -56,7 +56,7 @@ Vue.component('p5', {
 // Sets up the main Vue instance
 var bitString = new Vue({
   
-  el: '#pitch',
+  el: '#root',
 
   data: {
 
