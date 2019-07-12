@@ -11,8 +11,9 @@ function sketch(parent) {
 
     let numOscs = parent.data.harmData.length; // number of oscs in harmonic spectrum (16)
     let oscArray = []; // array of oscillators starting w/ fundamental
+    let fMultArray = [numOscs]; // array of frequency multipliers starting w/ 1 (fundamental)
     let ampArray = [numOscs]; // array of amplitudes starting w/ fundamental
-    let currentFreq; // fundamental frequency
+    let currentFreq = parent.data.fundamental; // fundamental frequency
     let canvas; // canvas
     let mute = true; // toggles sound
 
@@ -24,43 +25,51 @@ function sketch(parent) {
       p.noStroke();
       p.fill(127, 212, 195); // rects are green
 
-      	// initialize oscs, put in osc array, and populate amp array
+      	// initialize oscs and arrays
       	for (let i = 0; i < numOscs; i++) {
-        	ampArray[i] = parseFloat(parent.data.harmData[i].amp);
-        	let osc = new p5.Oscillator();
+          p.populateArrays(i);
+
+        	// populate osc array
+          let osc = new p5.Oscillator();
         	osc.setType('sine');
-        	osc.freq(parseFloat(currentFreq * parent.data.harmData[i].fMult));
+        	osc.freq(currentFreq * fMultArray[i]);
         	osc.amp(ampArray[i]);
         	oscArray.push(osc);
         }
 
-        let dummy = 0;
-
-        p.initialize(parent.data, dummy);
+        p.initialize();
     };
 
     // update the sketch only when data changes
     p.dataChanged = function(s, oldS) {
-      p.initialize(s, oldS);
+      p.initialize();
     }
 
-    p.initialize = function(s, oldS) {
+    p.populateArrays = function(i) {
+      // populate amp and frequency multiplier arrays
+      ampArray[i] = parseFloat(parent.data.harmData[i].amp);
+      fMultArray[i] = parseFloat(parent.data.harmData[i].fMult);
+    }
+
+    p.initialize = function() {
       // refresh window
       p.background(255);
 
       // set current fundamental frequency
-      currentFreq = parseFloat(s.fundamental);
+      currentFreq = parseFloat(parent.data.fundamental);
 
       for (let i = 0; i < numOscs; i++) {
-        let newAmp = parseFloat(s.harmData[i].amp);
-        let newMult = parseFloat(s.harmData[i].fMult);
+        p.populateArrays(i);
+
+        let newAmp = ampArray[i];
+        let newFMult = fMultArray[i];
 
         oscArray[i].amp(newAmp);
-        oscArray[i].freq(currentFreq * newMult);
+        oscArray[i].freq(currentFreq * newFMult);
 
-        var x = p.map(currentFreq * newMult, 0, 10000, 0, canvas.width);
+        var x = p.map(currentFreq * newFMult, 0, 10000, 0, canvas.width);
         var y = p.map(newAmp, 0, 1, 0, canvas.height);
-        p.rect(x, canvas.height-y, 10, y, 20, 20, 0, 0);
+        p.rect(x, canvas.height - y, 10, y, 20, 20, 0, 0);
       }
     }
 
