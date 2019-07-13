@@ -62,25 +62,33 @@ var bitString = new Vue({
 
     sound: {
 
-      masterGain: 1,
+      mute: true,
 
       fundamental: 432,
 
       // stores frequency multipliers and amplitude for each harmonic
-      harmData: buildHarmData(16)
+      spectrum: []
     }
+  },
+
+  methods: {
+    initSpectrum: function(n) {
+      let data = new Array(n);
+
+      for (let i = 0; i < n; i++) {
+        data[i] = { fMult: i + 1, amp: 1 };
+      }
+
+      return data;
+    },
+
+    muteSound: function() {
+      this.sound.mute = !this.sound.mute;
+    }
+  },
+
+  mounted: function() {
+    this.sound.spectrum = this.initSpectrum(16);
   }
+
 })
-
-// HOW TO PUT THIS CODE INSIDE harmData ABOVE???
-// helper functions
-function buildHarmData(n) {
-  
-  let data = new Array(n);
-
-  for (let i = 0; i < n; i++) {
-    data[i] = { fMult: i + 1, amp: 1 };
-  }
-
-  return data;
-}

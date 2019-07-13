@@ -40,8 +40,8 @@
 							</div>
 						</div>
 
-						<div id="mute">
-							<h3>Press "m" to toggle sound on and off.</h3>
+						<div id="mute button">
+							<button @click="muteSound">Click Me</button>
 						</div>
 
 
@@ -52,11 +52,11 @@
 						<div id="pitch-sliders">
 							<!--sliders for each harmonic-->
 							<ul>
-								<li v-for="harm in sound.harmData">
-									{{ (sound.fundamental * harm.fMult).toFixed(2) }} hz.
-									<input class="slider" type="range" min="0" max="1" step="0.01" v-model="harm.amp"></input>
-									multiplier: <input v-model="harm.fMult"></input>
-									amp: {{ (parseFloat(harm.amp)).toFixed(2) }}
+								<li v-for="partial in sound.spectrum">
+									{{ (sound.fundamental * partial.fMult).toFixed(2) }} hz.
+									<input class="slider" type="range" min="0" max="1" step="0.01" v-model="partial.amp"></input>
+									multiplier: <input v-model="partial.fMult"></input>
+									amp: {{ (parseFloat(partial.amp)).toFixed(2) }}
 								</li>
 							</ul>
 						</div>

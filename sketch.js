@@ -9,7 +9,7 @@ Advisors: Aatish Bhatia and Dan Trueman
 function sketch(parent) {
   return function( p ) {
 
-    let numOscs = parent.data.harmData.length; // number of oscs in harmonic spectrum (16)
+    let numOscs = parent.data.spectrum.length; // number of oscs in harmonic spectrum (16)
     let oscArray = []; // array of oscillators starting w/ fundamental
     let fMultArray = [numOscs]; // array of frequency multipliers starting w/ 1 (fundamental)
     let ampArray = [numOscs]; // array of amplitudes starting w/ fundamental
@@ -23,75 +23,81 @@ function sketch(parent) {
      	canvas = p.createCanvas(400, 400);
      	canvas.parent(parent.$el);
       p.noStroke();
-      p.fill(127, 212, 195); // rects are green
+      p.fill(127, 212, 195); // bars are torquoise
+      p.noLoop(); // draw loop not in use
 
-      	// initialize oscs and arrays
-      	for (let i = 0; i < numOscs; i++) {
-          p.populateArrays(i);
+      // initialize oscs array with empty oscs
+    	for (let i = 0; i < numOscs; i++) {
+        let osc = new p5.Oscillator();
+      	osc.setType('sine');
+        oscArray.push(osc);
+      }
 
-        	// populate osc array
-          let osc = new p5.Oscillator();
-        	osc.setType('sine');
-        	osc.freq(currentFreq * fMultArray[i]);
-        	osc.amp(ampArray[i]);
-        	oscArray.push(osc);
-        }
+      p.populateSpectrumArrays();
+      p.updateOscs();
+      p.updateSketch();
 
-        p.initialize();
     };
 
     // update the sketch only when data changes
-    p.dataChanged = function(s, oldS) {
-      p.initialize();
+    // BY USING data AND oldData THIS COULD BE EVEN MORE EFFICIENT
+    p.dataChanged = function(data, oldData) {
+      p.populateSpectrumArrays();
+      p.updateOscs();
+      p.updateSketch();
+
+      console.log(data);
+      console.log(oldData);
+      if (data.mute != oldData.mute)
+       p.mute();
     }
 
-    p.populateArrays = function(i) {
-      // populate amp and frequency multiplier arrays
-      ampArray[i] = parseFloat(parent.data.harmData[i].amp);
-      fMultArray[i] = parseFloat(parent.data.harmData[i].fMult);
-    }
-
-    p.initialize = function() {
-      // refresh window
-      p.background(255);
-
-      // set current fundamental frequency
+    // populate amp and frequency multiplier arrays
+    p.populateSpectrumArrays = function() {
+      // set new fundamental frequency
       currentFreq = parseFloat(parent.data.fundamental);
 
       for (let i = 0; i < numOscs; i++) {
-        p.populateArrays(i);
+        ampArray[i] = parseFloat(parent.data.spectrum[i].amp);
+        fMultArray[i] = parseFloat(parent.data.spectrum[i].fMult);
+      }
+    }
 
-        let newAmp = ampArray[i];
-        let newFMult = fMultArray[i];
+    // update the amplitude and frequency of all oscillators
+    p.updateOscs = function() {
+      for (let i = 0; i < numOscs; i++) {
+        oscArray[i].amp(ampArray[i]);
+        oscArray[i].freq(currentFreq * fMultArray[i]);
+      }
+    }
 
-        oscArray[i].amp(newAmp);
-        oscArray[i].freq(currentFreq * newFMult);
+    p.updateSketch = function() {
+      // refresh window
+      p.background(255);
 
-        var x = p.map(currentFreq * newFMult, 0, 10000, 0, canvas.width);
-        var y = p.map(newAmp, 0, 1, 0, canvas.height);
+      // create spectrogram
+      for (let i = 0; i < numOscs; i++) {
+        var x = p.map(currentFreq * fMultArray[i], 0, 10000, 0, canvas.width);
+        var y = p.map(ampArray[i], 0, 1, 0, canvas.height);
         p.rect(x, canvas.height - y, 10, y, 20, 20, 0, 0);
       }
     }
 
     // mute function
-    p.keyPressed = function() {
+    p.mute = function() {
 
-      // keycode m val
-      if (p.keyCode === 77) {
-        console.log("pressed");
-        mute = !mute;
+      console.log(parent.data.mute);
 
-        // toggle sound on and off
-        if (!mute) {
-        	for (let i = 0; i < numOscs; i++)
-            	oscArray[i].start();
-        }
+      if (parent.data.mute) {
+        for (let i = 0; i < numOscs; i++)
+          oscArray[i].stop();
+      }
 
-        else {
-          for (let i = 0; i < numOscs; i++)
-            oscArray[i].stop();
-        }
+      else {
+        for (let i = 0; i < numOscs; i++)
+          oscArray[i].start();
       }
     };
+
   };
 }
