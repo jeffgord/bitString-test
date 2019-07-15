@@ -45,8 +45,8 @@ ul {
 
 #fundamental {
     display: inline-block;
-    padding: 10px 0;
-}
+/*    padding: 10px 0;
+*/}
 
 #fundamental-wrapper {
     text-align: center;
@@ -88,7 +88,7 @@ body {
 .grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 30% 70%;
+    grid-template-rows: 20% 25% 55%;
     grid-gap: 10px;
 }
 
@@ -106,8 +106,8 @@ body {
         padding: 20px;
         grid-column-start: 1;
         grid-column-end: 2;
-        grid-row-start: 2;
-        grid-row-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
     }
 
     .grid-item-p5 {
@@ -115,10 +115,24 @@ body {
         padding: 20px;
         grid-column-start: 2;
         grid-column-end: 3;
+        grid-row-start: 3;
+        grid-row-end: 4;
+    }
+
+    .grid-item-keyboard {
+        border-radius: 5px;
+        padding: 20px;
+        grid-column-start: 1;
+        grid-column-end: 3;
         grid-row-start: 2;
         grid-row-end: 3;
     }
 
+    /*.slider {
+        width: 150px;
+        height: 10px;
+    }
+    */
     .slider {
         -webkit-appearance: none;
         width: 150px;
@@ -148,9 +162,60 @@ body {
         background: rgb(82, 81, 81);
         cursor: pointer;
       }
-  /*
-img {
-    display: block;
-    margin: 0 auto;
+
+#keyboard-wrapper {
+    text-align: center;
+
+    }
+
+    #keyboard {
+    display: inline-block;
+}
+
+    .key {
+      float: left;
+      position: relative;
+      display: flex;
+    }
+
+    .white {
+      height: 14.4vw;
+      width: 3.8095238095vw;
+      z-index: 1;
+      border-top: 0.12vw solid #AAAAAA;
+      border-bottom: 0.12vw solid #AAAAAA;
+      border-left: 0.12vw solid #AAAAAA;
+      background-color: white;
+    }
+
+    .black {
+      height: 7.92vw;
+      width: 2.0952380952vw;
+      z-index: 2;
+      border: 0.12vw solid #000000;
+      background-color: #222222;
+    }
+
+    .a, .b, .d, .e, .g, .black {
+      margin: 0 0 0 -1.1676190476vw;
+    }
+
+    #keyboard > .key:last-child {
+      border-right: 0.12vw solid #AAAAAA;
+    }
+
+
+/* button styling not working */
+#mute-button-wrapper {
+    text-align: center;
+}
+
+#mute-button {
+    background-color: white;
+    color: black;
+    border: 2px solid #7fd4c3; /* Green */
     padding: 5px;
-  } */
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+}
