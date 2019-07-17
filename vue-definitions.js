@@ -56,10 +56,10 @@ Vue.component('p5', {
 
 // custom slider component, credit: Aatish Bhatia
 Vue.component('slider',{
-  props: ['min', 'max', 'step', 'mouseIsPressed'],
+  props: ['min', 'max', 'step', 'mouseIsPressed', 'value'],
 
   template: `
-    <input type="range" :min="min" :max="max" :step="step" @mousedown.prevent @mouseleave="mouseLeft" @mouseenter="mouseEntered" @mousemove="sliderMoved" @click="sliderClicked"></input>
+    <input type="range" :min="min" :max="max" :step="step" :value="value" @mousedown.prevent @mouseleave="mouseLeft" @mouseenter="mouseEntered" @mousemove="sliderMoved" @click="sliderClicked" @change="sliderChanged"></input>
   `,
 
   methods: {
@@ -81,24 +81,96 @@ Vue.component('slider',{
       this.updateSlider(event);
     },
 
+    sliderChanged: function(event) {
+      let slider = event.target;
+      this.$emit('input', slider.value)
+    },
+
     updateSlider: function(event) {
       let slider = event.target;
-      let bounds = event.target.getBoundingClientRect();
-      let x = event.clientX - bounds.left;
-      let width = bounds.right - bounds.left - 1;
-      slider.value = slider.min + (slider.max - slider.min) * x / width;
-      console.log(slider.value);
-    }
+      let offset = event.target.getBoundingClientRect().left;
 
+      let x = event.clientX - offset;
+      let pos = Math.round(x / slider.step) * slider.step / (slider.clientWidth - 1);
+
+      let value = slider.min + (slider.max - slider.min) * pos;
+
+      if (value < slider.min) {
+        value = slider.min;
+      } else if (value > slider.max) {
+        value = slider.max;
+      }
+
+      slider.value = value;
+      this.$emit('input', slider.value)
+    }
   },
 
   data: function() {
     return {
-      mouseOverElement: false,
-      sliderVal: 0
+      mouseOverElement: false
     }
   }
 });
+
+// // custom piano key component
+// Vue.component('key',{
+//   props: ['mouseIsPressed', 'value'],
+
+//   template: `
+//     <:value="value" @mousedown.prevent @mouseleave="mouseLeft" @mouseenter="mouseEntered" @mousemove="sliderMoved" @click="sliderClicked" @change="sliderChanged"></input>
+//   `,
+
+//   methods: {
+//     mouseEntered: function(event) {
+//       this.mouseOverElement = true;
+//     },
+
+//     mouseLeft: function(event) {
+//       this.mouseOverElement = false;
+//     },
+
+//     sliderMoved: function(event) {
+//       if (this.mouseIsPressed && this.mouseOverElement) {
+//         this.updateSlider(event);
+//       }
+//     },
+
+//     sliderClicked: function(event) {
+//       this.updateSlider(event);
+//     },
+
+//     sliderChanged: function(event) {
+//       let slider = event.target;
+//       this.$emit('input', slider.value)
+//     },
+
+//     updateSlider: function(event) {
+//       let slider = event.target;
+//       let offset = event.target.getBoundingClientRect().left;
+
+//       let x = event.clientX - offset;
+//       let pos = Math.round(x / slider.step) * slider.step / (slider.clientWidth - 1);
+
+//       let value = slider.min + (slider.max - slider.min) * pos;
+
+//       if (value < slider.min) {
+//         value = slider.min;
+//       } else if (value > slider.max) {
+//         value = slider.max;
+//       }
+
+//       slider.value = value;
+//       this.$emit('input', slider.value)
+//     }
+//   },
+
+//   data: function() {
+//     return {
+//       mouseOverElement: false
+//     }
+//   }
+// });
 
 
 // Sets up the main Vue instance
@@ -148,7 +220,7 @@ var bitString = new Vue({
       { class: "key black g_sharp", id: "G#5" },
       { class: "key white a", id: "A5" },
       { class: "key black a_sharp", id: "A#5" },
-      { class: "key white b", id: "B5" }
+      { class: "key white b", id: "B5" },
     ],
 
     sound: {
@@ -164,24 +236,24 @@ var bitString = new Vue({
 
   methods: {
 
-    // custom mouse controls for sliders
+    // custom mouse controls for sliders and keys
     mousePressed: function(event) {
+      console.log("pressed");
       this.mouseIsPressed = true;
     },
-
     mouseReleased: function(event) {
+      console.log("released");
       this.mouseIsPressed = false;
     },
 
 
     // changes fundamental frequency based on keyboard note pressed
     noteToFreq: function(event) {
-      console.log("clicked note");
-      console.log(event.target, event.target.id, event.target.className);
+      // console.log("clicked note");
+      // console.log(event.target, event.target.id, event.target.className);
 
       let note = event.target.id;
-      // somehow we want to add a select class to the target here
-      // event.target.className = "changed"; //dont do this
+      // // somehow we want to add a select class to the target here
 
       let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
       const cFreq = 261.6255653;
@@ -190,8 +262,19 @@ var bitString = new Vue({
       let noteIndex = notes.indexOf(noteInAnOctave);
       let myFreq = cFreq * Math.pow(2, noteIndex / 12) * Math.pow(2, octave - 4);
       this.sound.fundamental = myFreq;
+
+      this.changeKeyColor(event);
     },
 
+    // change color of selected key (triggered on mouse down)
+    changeKeyColor: function(event) {
+      event.target.className = "selected " + event.target.className;
+    },
+
+    // restore original color of selected key (trigged when mouse released)
+    restoreKeyColor: function(event) {
+      event.target.className = event.target.className.substring(9);
+    },
 
     // initializes spectrum
     initSpectrum: function(n) {
