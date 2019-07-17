@@ -21,7 +21,7 @@
 		<div id="root">
 
 			<div class="grid-container">
-				
+
 				<div class="grid-item-fundamental-controls">
 					<div id="pitch-title">
 						<h2>Pitch</h2>
@@ -42,18 +42,14 @@
 							<div id="freqset">
 								Set Frequency: <input v-model="sound.fundamental"></input> Hz.
 							</div>
-							
+
 						</div>
 					</div>
 				</div>
 
 				<!--keyboard to set fundamental frequencies-->
 				<div class="grid-item-keyboard">
-					<div id="keyboard-wrapper">
-						<div id="keyboard">
-							<div v-for="note in notes" v-bind:key="note.id" :class="note.class" :id="note.id" @mousedown="noteToFreq" @mouseup="restoreKeyColor"></div>
-						</div>
-					</div>
+					<keyboard></keyboard>
 				</div>
 
 				<div class="grid-item-sliders">
@@ -64,7 +60,7 @@
 						<ul>
 							<li v-for="partial in sound.spectrum">{{ (sound.fundamental * partial.fMult).toFixed(2) }} hz.
 								<!--<input class="slider" type="range" min="0" max="1" step="0.01" v-model="partial.amp"></input>-->
-								<slider class="slider" min="0" max="1" step="0.01" 
+								<slider class="slider" min="0" max="1" step="0.01"
 									v-model="partial.amp" :mouse-is-pressed="mouseIsPressed"></slider>
 								multiplier: <input v-model="partial.fMult"></input>
 								amp: {{ (parseFloat(partial.amp)).toFixed(2) }}
@@ -96,7 +92,7 @@
 		</div>
 
 	</body>
-	
+
 
 	<script src="vue-definitions.js"></script>
 
