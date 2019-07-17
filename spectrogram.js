@@ -52,12 +52,13 @@ function sketch(parent) {
       p.background(255);
 
       // create spectrogram
+      let barWidth = 10;
       for (let i = 0; i < numOscs; i++) {
-        var x = p.map(currentFreq * fMultArray[i], currentFreq, currentFreq * fMultArray[numOscs - 1], 0, canvas.width);
+        var x = p.map(currentFreq * fMultArray[i], currentFreq, currentFreq * fMultArray[numOscs - 1], 0, canvas.width - barWidth);
         var y = p.map(ampArray[i], 0, 1, 0, canvas.height);
         //let barwidth = ((fMultArray[numOscs - 1]) * currentFreq - currentFreq) / (numOscs);
         //barWidth = p.map(barwidth, 0, barwidth, 0, canvas.width);
-        p.rect(x, canvas.height - y, 10, y, 20, 20, 0, 0);
+        p.rect(x, canvas.height - y, barWidth, y, 20, 20, 0, 0);
         // (fMultArray[numOscs - 1] - currentFreq) / numOscs
       }
     };

@@ -65,8 +65,6 @@ function sketch(parent) {
     // mute function
     p.mute = function() {
 
-      console.log(parent.data.mute);
-
       if (parent.data.mute) {
         for (let i = 0; i < numOscs; i++)
           oscArray[i].stop();
