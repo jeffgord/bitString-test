@@ -1,17 +1,54 @@
+
+
+// custom keyboard component, credit Aatish Bhatia
 Vue.component('key', {
 
   props: ['note'],
 
   template: `
-  <div :class="note.class" @mousedown="keyPressed"></div>
+  <div :class="note.class" @mousedown="keyPressed" @mouseup="mouseReleased" @mouseleave="mouseLeft"></div>
   `,
 
   methods: {
-    keyPressed: function() {
-      console.log('key pressed: ', this.note.id);
+
+    keyPressed: function(event) {
+
+      // save the key that was pressed
+      this.keyPressed = event;
+
+      // convert note into proper frequency
+      note = this.note.id;
+      let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+      const cFreq = 261.6255653;
+      let noteInAnOctave = note.slice(0, -1);
+      let octave = parseInt(note.slice(-1));
+      let noteIndex = notes.indexOf(noteInAnOctave);
+      let myFreq = cFreq * Math.pow(2, noteIndex / 12) * Math.pow(2, octave - 4);
+
+      console.log(myFreq);
+      //this.sound.fundamental = myFreq;
+        
+
+      // change key color
+      event.target.className = "selected " + event.target.className;
+    },
+
+    mouseLeft: function(event) {
+      if (event.target.className.substring(0, 9).match("selected ")) {
+        this.restoreKeyColor();
+      }
+    },
+
+    mouseReleased: function(event) {
+      if (event.target.className.substring(0, 9) == "selected ") {
+        this.restoreKeyColor();
+      }
+    },
+
+    restoreKeyColor: function() {
+      this.keyPressed.target.className = this.keyPressed.target.className.substring(9);
     }
   }
-
 });
 
 Vue.component('keyboard', {
@@ -71,7 +108,7 @@ Vue.component('keyboard', {
 
 });
 
-// p5-vue component, credit: Aatish Bhatia
+// p5-vue sketch component, credit: Aatish Bhatia
 Vue.component('p5', {
 
   template: '<div></div>',
@@ -218,35 +255,6 @@ var bitString = new Vue({
       this.mouseIsPressed = false;
     },
 
-
-    // changes fundamental frequency based on keyboard note pressed
-    noteToFreq: function(event) {
-      // console.log("clicked note");
-      // console.log(event.target, event.target.id, event.target.className);
-
-      let note = event.target.id;
-      // // somehow we want to add a select class to the target here
-
-      let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-      const cFreq = 261.6255653;
-      let noteInAnOctave = note.slice(0, -1);
-      let octave = parseInt(note.slice(-1));
-      let noteIndex = notes.indexOf(noteInAnOctave);
-      let myFreq = cFreq * Math.pow(2, noteIndex / 12) * Math.pow(2, octave - 4);
-      this.sound.fundamental = myFreq;
-
-      this.changeKeyColor(event);
-    },
-
-    // change color of selected key (triggered on mouse down)
-    changeKeyColor: function(event) {
-      event.target.className = "selected " + event.target.className;
-    },
-
-    // restore original color of selected key (trigged when mouse released)
-    restoreKeyColor: function(event) {
-      event.target.className = event.target.className.substring(9);
-    },
 
     // initializes spectrum
     initSpectrum: function(n) {
