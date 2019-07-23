@@ -1,92 +1,112 @@
-/* 
-bitString Prototype
-Jeff Gordon and Maya Keren
-Advisors: Aatish Bhatia and Dan Trueman
-7/16/19
-*/
-
-// p5 sketch for waveform
 function sketch(parent) {
     return function( p ) {
-        
-        let canvas; // canvas
-        let period; // sets the period of the wave on the screen
-        let waveforms; // array of waveforms to be graphed
-        let numOscs = parent.data.spectrum.length; // number of oscs in harmonic spectrum (16)
-        let waveAmps; // changes amplitude based on user input
-        let fMultArray = [numOscs]; // array of frequency multipliers starting w/ 1 (fundamental)
+
+        let canvas;
+        let numOscs = parent.data.spectrum.length; // number of partials
+        let fMultArray = []; // array of frequency multipliers starting w/ 1 (fundamental)
+        let ampArray = []; // array of amplitudes starting w/ fundamental
+        let currentFreq; // fundamental frequency
+        let waves = []; // array of waves (each storing its own 'y' coordinates)
 
         p.setup = function() {
             p.noLoop(); // draw loop not in use
 
-            // intialize variables
+            // sketch settings
             canvas = p.createCanvas(800, 250);
             canvas.parent(parent.$el);
-            period = canvas.width/(2 * Math.PI)
-            waveforms = [];
-            waveAmps = [];
-            p.populateArrays();
-            p.initializeWaveforms();
-            p.drawWaves();
-        };
+            p.strokeWeight(5);
+            p.stroke(127, 212, 195);
 
-        // changes sketch when data is changed
-        p.dataChanged = function(s, oldS) {
+            // program always starts muted
+            p.mute();
+        }
+
+        p.dataChanged = function(val, oldVal) {
             p.background(255);
-            p.populateArrays();
-            p.initializeWaveforms();
-            p.drawWaves();
-          };
 
-        // fills amp and fmult array
-        p.populateArrays = function() {
+            if (parent.data.mute) {
+                p.mute();
+            }
+
+            else {
+                p.clearWaves();
+                p.populateSpectrumArrays();
+                p.createWaves();
+                p.drawWaveform();
+            }
+
+        }
+
+        // populate amp and frequency multiplier arrays
+        p.populateSpectrumArrays = function() {
+
+          currentFreq = parseFloat(parent.data.fundamental);
+
+          for (let i = 0; i < numOscs; i++) {
+            ampArray[i] = parseFloat(parent.data.spectrum[i].amp);
+            fMultArray[i] = parseFloat(parent.data.spectrum[i].fMult);
+          }
+        }
+
+        // builds arrays of amplitudes for each frequency
+        p.createWaves = function() {
+
+            // loops through each oscillator
             for (let i = 0; i < numOscs; i++) {
-                waveAmps[i] = parseFloat(parent.data.spectrum[i].amp);
-                fMultArray[i] = parseFloat(parent.data.spectrum[i].fMult);
-              }
-            waveAmps = p.mapWaveAmps(waveAmps); // amplitudes of waves, for testing
-        };
 
-        // pushes all waves onto waveform array
-        p.initializeWaveforms = function() {
-        for (let i = 0; i < numOscs; i++) {
-            let wave = []; // wave y-val array
+                // holds a 'y' coordinate for each 'x' in the canvas
+                let wave = [canvas.width];
 
-            // populate wave arrays if amplitude is greater than zero
-            if (waveAmps[i] != 0) {
-            for (let j = 0; j < canvas.width; j = j + 1) {
-                wave[j] = waveAmps[i] * p.sin(j * fMultArray[i] / (period)) + canvas.height/2;
+                // map the amplitude scaling factor to the height of the canvas
+                let amplitude = p.map(ampArray[i], 0, 1, 0, canvas.height / 2);
+
+                // loops through all 'x' values
+                for (let x = 0; x < canvas.width; x++ ) {
+                    wave[x] = amplitude * p.sin(x * fMultArray[i] * 2 * Math.PI / canvas.width );
                 }
-            waveforms.push(wave);
+
+                waves.push(wave);
+            }
+
+        }
+
+        // clear contents of wave array
+        p.clearWaves = function() {
+            waves.length = 0;
+        }
+
+        p.drawWaveform = function() {
+
+            let allAmpsZero = true;
+
+            for (let x = 0; x < canvas.width; x++) {
+                let yComposite = 0;
+                let ampTotal = 0;
+
+                for (let i = 0; i < waves.length; i++) {
+                    yComposite += waves[i][x];
+
+                    if (ampArray[i] != 0)
+                        allAmpsZero = false;
+
+                    // running total, accounting for edge case of 0 hz
+                    if (fMultArray[i] != 0)
+                        ampTotal += ampArray[i];
                 }
-            }
-        };
 
-        // draws composite wave depending on amplitude of harmonics
-        p.drawWaves = function() {
-        p.strokeWeight(5)
-        p.stroke(127, 212, 195);
-            
-        for (let j = 0; j < canvas.width; j = j + 1) {
-            
-            let compositeYVal = 0;
-            for (let i = 0; i < waveforms.length; i++) {
-                compositeYVal += waveforms[i][j];
-            }
+                yComposite /= ampTotal;
 
-            compositeYVal /= waveforms.length;
-            
-            p.point(j, compositeYVal);
-            }
-        };
+                if (allAmpsZero)
+                    p.mute();
 
-        // converts between 0-1 scale amplitude and p5 drawing dimensions
-        p.mapWaveAmps = function(ampArray) {
-            let newAmps = [];
-            for (let i = 0; i < ampArray.length; i++) {
-                newAmps[i] = p.map(ampArray[i], 0, 1, 0, canvas.height/2);
+                p.point(x, yComposite + canvas.height / 2);
             }
-            return newAmps;
-        };
-    };
+        }
+
+        // when muted, draw a straight line
+        p.mute = function() {
+            p.line(0, canvas.height / 2, canvas.width, canvas.height / 2);
+        }
+
+    }
 }
