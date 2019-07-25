@@ -7,9 +7,9 @@
 		<title>bitString Prototype</title>
 		<meta charset="utf-8">
 		<!--libraries-->
-		<script src="vue.js"></script>
-		<script src="p5.js"></script>
-		<script src="p5.sound.js"></script>
+		<script src="https://unpkg.com/vue"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.sound.js"></script>
 		<link href="style.css" rel="stylesheet">
     	<link href="https://fonts.googleapis.com/css?family=Lora&display=swap" rel="stylesheet">
 	</head>
@@ -21,6 +21,10 @@
 		<div id="root">
 
 			<div class="grid-container">
+
+				<div class="soundOscs">
+					<p5 src="sound.js" :data="sound"></p5>
+				</div>
 
 				<div class="grid-item-fundamental-controls">
 					<div id="pitch-title">
@@ -68,11 +72,10 @@
 					</div>
 				</div>
 
-				<div class="grid-item-p5">
+				<div class="grid-item-spectrogram">
 					<div id="p5-wrapper">
-						<div id="p5">
-							<!--p5 sketch and sound based on pitch data-->
-							<p5 src="sound.js" :data="sound"></p5>
+						<div id="spectrogram">
+							<!--p5 sketch based on pitch data-->
 							<p5 src="spectrogram.js" :data="sound"></p5>
 						</div>
 					</div>
@@ -81,8 +84,16 @@
 				<div class="grid-item-waveform">
 					<div id="p5-wrapper">
 						<div id="waveform">
-							<h3>unmute and raise amplitudes to see waveform</h3>
+							<h3>unmute and raise amplitudes to see waveform and string animation</h3>
 							<p5 src="waveform.js" :data="sound"></p5>
+						</div>
+					</div>
+				</div>
+
+				<div class="grid-item-string">
+					<div id="p5-wrapper">
+						<div id="string">
+							<p5 src="string-animation.js" :data="sound"></p5>
 						</div>
 					</div>
 				</div>

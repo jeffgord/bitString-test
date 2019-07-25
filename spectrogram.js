@@ -22,7 +22,7 @@ function sketch(parent) {
      	canvas = p.createCanvas(400, 400);
      	canvas.parent(parent.$el);
       p.noStroke();
-      p.fill(127, 212, 195); // bars are torquoise
+      p.fill(51); // bars are torquoise
 
       p.populateSpectrumArrays();
       p.updateSketch();
@@ -32,6 +32,10 @@ function sketch(parent) {
     // update the sketch only when data changes
     // BY USING data AND oldData THIS COULD BE EVEN MORE EFFICIENT???
     p.dataChanged = function(s, oldS) {
+      if (parent.data.mute)
+        p.fill(155);
+      else p.fill(127, 212, 195);
+
       p.populateSpectrumArrays();
       p.updateSketch();
     }

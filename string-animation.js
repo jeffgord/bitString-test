@@ -7,21 +7,19 @@ function sketch(parent) {
         let ampArray = []; // array of amplitudes starting w/ fundamental
         let currentFreq; // fundamental frequency
         let waves = []; // array of waves (each storing its own 'y' coordinates)
+        let t = 0; // time step
 
         p.setup = function() {
-            p.noLoop(); // draw loop not in use
-
             // sketch settings
             canvas = p.createCanvas(800, 250);
             canvas.parent(parent.$el);
             p.strokeWeight(5);
-            p.stroke(127, 212, 195);
 
             // program always starts muted
             p.mute();
         }
 
-        p.dataChanged = function(val, oldVal) {
+        p.draw = function() {
             p.background(255);
 
             if (parent.data.mute) {
@@ -29,12 +27,16 @@ function sketch(parent) {
             }
 
             else {
-                p.clearWaves();
-                p.populateSpectrumArrays();
-                p.createWaves();
                 p.drawWaveform();
             }
 
+        }
+
+        // arrays only need to be refreshed when data changes
+        p.dataChanged = function(val, oldVal) {
+            p.clearWaves();
+            p.populateSpectrumArrays();
+            p.createWaves();
         }
 
         // populate amp and frequency multiplier arrays
@@ -86,7 +88,7 @@ function sketch(parent) {
                 let ampTotal = 0;
 
                 for (let i = 0; i < waves.length; i++) {
-                    yComposite += waves[i][x];
+                    yComposite += waves[i][x] * Math.sin(fMultArray[i] * t);
 
                     if (ampArray[i] != 0)
                         allAmpsZero = false;
@@ -105,6 +107,8 @@ function sketch(parent) {
             }
 
             p.endShape();
+
+            t += 0.01;
         }
 
         // when muted, draw a straight line

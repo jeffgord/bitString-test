@@ -50,7 +50,7 @@ ul {
     text-align: center;
 }
 
-#p5 {
+#spectrogram {
     padding-top: 75px;
 }
 
@@ -58,18 +58,22 @@ ul {
     text-align: center;
 }
 
+.soundOscs {
+  display: none;
+}
+
 /* grid elements */
 
 .grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 2fr 1fr;
-    grid-gap: 10px;
+    grid-template-rows: 1fr 1fr 2fr 1fr 1fr;
+    /*grid-gap: 10px;*/
 }
 
   .grid-item-fundamental-controls {
       border-radius: 5px;
-      padding: 20px;
+      padding: 10px;
       grid-column-start: 1;
       grid-column-end: 3;
       grid-row-start: 1;
@@ -78,16 +82,16 @@ ul {
 
   .grid-item-sliders {
       border-radius: 5px;
-      padding: 20px;
+      padding: 10px;
       grid-column-start: 1;
       grid-column-end: 2;
       grid-row-start: 3;
       grid-row-end: 4;
   }
 
-  .grid-item-p5 {
+  .grid-item-spectrogram {
       border-radius: 5px;
-      padding: 20px;
+      padding: 10px;
       grid-column-start: 2;
       grid-column-end: 3;
       grid-row-start: 3;
@@ -96,7 +100,7 @@ ul {
 
   .grid-item-keyboard {
       border-radius: 5px;
-      padding: 20px;
+      padding: 10px;
       grid-column-start: 1;
       grid-column-end: 3;
       grid-row-start: 2;
@@ -105,11 +109,20 @@ ul {
 
   .grid-item-waveform {
       border-radius: 5px;
-      padding: 20px;
+      padding: 30px;
       grid-column-start: 1;
       grid-column-end: 3;
       grid-row-start: 4;
       grid-row-end: 5;
+  }
+
+  .grid-item-string {
+      border-radius: 5px;
+      padding: 20px;
+      grid-column-start: 1;
+      grid-column-end: 3;
+      grid-row-start: 5;
+      grid-row-end: 6;
   }
 
 /* slider elements */
