@@ -1,6 +1,6 @@
+let fft; // globabl fft
 
-
-// custom keyboard component, credit Aatish Bhatia
+// custom keyboard component
 Vue.component('key', {
 
   props: ['note'],

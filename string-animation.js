@@ -64,7 +64,7 @@ function sketch(parent) {
 
                 // loops through all 'x' values
                 for (let x = 0; x < canvas.width; x++ ) {
-                    wave[x] = amplitude * p.sin(x * fMultArray[i] * 2 * Math.PI / canvas.width );
+                    wave[x] = amplitude * p.sin(x * fMultArray[i] * Math.PI / canvas.width );
                 }
 
                 waves.push(wave);
