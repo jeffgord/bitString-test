@@ -57,8 +57,8 @@ function sketch(parent) {
                 // holds a 'y' coordinate for each 'x' in the canvas
                 let wave = [canvas.width];
 
-                // map the amplitude scaling factor to the height of the canvas
-                let amplitude = p.map(ampArray[i], 0, 1, 0, (canvas.height / 2) - 10);
+                // map the amplitude scaling factor to the height of the canvas and flips
+                let amplitude = -p.map(ampArray[i], 0, 1, 0, (canvas.height / 2) - 5);
 
                 // loops through all 'x' values
                 for (let x = 0; x < canvas.width; x++ ) {

@@ -28,6 +28,9 @@ function sketch(parent) {
 
       p.populateSpectrumArrays();
       p.updateOscs();
+
+      // initialize global fft
+      fft = new p5.FFT();
     };
 
     // update the sketch only when data changes
